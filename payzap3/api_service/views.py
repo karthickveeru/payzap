@@ -1,7 +1,13 @@
 from django.shortcuts import render
 from django.db.models import Q
 from rest_framework import generics
-from api_service.serializers import TransactionWriteSerializer, TransactionRetrieveSerialzer, LoginSerializer, TransactionStatusSerializer
+from api_service.serializers import (
+    TransactionWriteSerializer, 
+    TransactionRetrieveSerialzer, 
+    LoginSerializer, 
+    TransactionStatusSerializer,
+    UserSerializer
+)
 from api_service.models import User, Transactions
 from rest_framework.views import APIView
 from rest_framework import status
@@ -10,6 +16,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
 from django.contrib.auth import login, logout
 from django.db import transaction
+from django.contrib.auth.models import User
 from .permissions import canUpdateTransaction
 
 
@@ -23,7 +30,7 @@ class Login(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         login(request, user)
-        return Response(None, status=status.HTTP_202_ACCEPTED)
+        return Response(None, status=status.HTTP_200_OK)
 
 class Logout(APIView):
     permission_classes = [IsAuthenticated]
@@ -75,5 +82,9 @@ class PostTransactionStatus(APIView):
        
         return Response(status=status.HTTP_202_ACCEPTED)
 
-
+class ListUsers(generics.ListAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        return User.objects.exclude(Q(is_superuser=True) | Q(username = self.request.user.username))
 

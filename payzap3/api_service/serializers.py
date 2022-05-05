@@ -3,6 +3,7 @@ from api_service.models import Transactions
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 
+
 class TransactionWriteSerializer(serializers.ModelSerializer):
     transaction_with = serializers.CharField(max_length=100)
 
@@ -20,6 +21,8 @@ class TransactionWriteSerializer(serializers.ModelSerializer):
     
 
 class TransactionRetrieveSerialzer(serializers.ModelSerializer):
+    transaction_with = serializers.CharField()
+    transaction_from = serializers.CharField()
     class Meta:
         model = Transactions
         fields =  '__all__'
@@ -63,3 +66,8 @@ class TransactionStatusSerializer(serializers.Serializer):
         model = Transactions
         fields = ('status',)
         extra_kwargs = {'status': {'required': True}} 
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username',)
