@@ -1,0 +1,8 @@
+1. created a DRF api-service app for creating, retrieveing, and updating a Transaction
+2. Includes basic DRF session authentication 
+3. All views are authentication protected and settleTransaction view is permission protected
+4. SettleTransaction View is designed as POST instead of PUT or PATCH  to avoid users from updating anyfield other than status
+5. Missed to start with custom user model which is recommended for new projects to make scehma changes later
+6. used Django-Money field for Transaction amount
+7. yet to dockerize  the app
+
